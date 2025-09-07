@@ -81,61 +81,61 @@ Use the following configuration for your `custom-api` widget in Glance.
 
 ```yaml
     - type: custom-api
-    title: Agenda
-    url: http://<IP-DOCKER>:5000/api/agenda
-    cache: 1h
-    options:
-      collapse_after: 12 # Control the "Show More" button here. Use -1 to disable.
-    template: |
-      {{ $collapseAfter := .Options.IntOr "collapse_after" -1 }}
-      {{ $today := (offsetNow "0h" | formatTime "2006-01-02") }}
-
-      {{ if gt $collapseAfter 0 }}
-      <div class="list collapsible-container" data-collapse-after="{{ $collapseAfter }}" style="--list-gap: 8px;">
-      {{ else }}
-      <div class="list" style="--list-gap: 8px;">
-      {{ end }}
-
-      {{/* Loop over the top-level array directly */}}
-      {{ range .JSON.Array "" }}
-        {{ $date := .String "date" }}
-
-        {{/* Date Header */}}
-        <div class="size-sm color-paragraph" style="padding-top: 15px; font-weight: bold;">
-          {{ if eq $date $today }}
-            Today
-          {{ else }}
-            {{ $date | parseTime "2006-01-02" | formatTime "Jan 2" }}
-          {{ end }}
-        </div>
-                
-        {{/* Loop over the "items" array for each date group */}}
-        {{ range .Array "items" }}
-          <div class="flex items-center" style="gap: 15px;">
-            <div style="width: 50px; text-align: right; flex-shrink: 0;">
-              {{ if .Bool "has_file" }}
-                <span class="color-positive" style="display: inline-flex; align-items: center;">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width: 1.4em; height: 1.4em;"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" /></svg>
-                </span>
-              {{ else if eq $date $today }}
-                <span class="color-highlight">
-                  {{ .String "release_datetime" | parseTime "rfc3339" | formatTime "15:04" }}
-                </span>
-              {{ else }}
-                <span class="color-paragraph">•</span>
-              {{ end }}
-            </div>
-            <div class="flex items-center" style="gap: 8px;">
-              <span class="color-theme-contrast-30" style="flex-shrink: 0;">
-              <div>
-                <span class="color-paragraph">{{ .String "title" }}</span>
-                <span class="size-sm color-theme-contrast-50">{{ .String "details" }}</span>
+      title: Agenda
+      url: http://<IP-DOCKER>:5000/api/agenda
+      cache: 1h
+      options:
+        collapse_after: 12 # Control the "Show More" button here. Use -1 to disable.
+      template: |
+        {{ $collapseAfter := .Options.IntOr "collapse_after" -1 }}
+        {{ $today := (offsetNow "0h" | formatTime "2006-01-02") }}
+  
+        {{ if gt $collapseAfter 0 }}
+        <div class="list collapsible-container" data-collapse-after="{{ $collapseAfter }}" style="--list-gap: 8px;">
+        {{ else }}
+        <div class="list" style="--list-gap: 8px;">
+        {{ end }}
+  
+        {{/* Loop over the top-level array directly */}}
+        {{ range .JSON.Array "" }}
+          {{ $date := .String "date" }}
+  
+          {{/* Date Header */}}
+          <div class="size-sm color-paragraph" style="padding-top: 15px; font-weight: bold;">
+            {{ if eq $date $today }}
+              Today
+            {{ else }}
+              {{ $date | parseTime "2006-01-02" | formatTime "Jan 2" }}
+            {{ end }}
+          </div>
+                  
+          {{/* Loop over the "items" array for each date group */}}
+          {{ range .Array "items" }}
+            <div class="flex items-center" style="gap: 15px;">
+              <div style="width: 50px; text-align: right; flex-shrink: 0;">
+                {{ if .Bool "has_file" }}
+                  <span class="color-positive" style="display: inline-flex; align-items: center;">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width: 1.4em; height: 1.4em;"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" /></svg>
+                  </span>
+                {{ else if eq $date $today }}
+                  <span class="color-highlight">
+                    {{ .String "release_datetime" | parseTime "rfc3339" | formatTime "15:04" }}
+                  </span>
+                {{ else }}
+                  <span class="color-paragraph">•</span>
+                {{ end }}
+              </div>
+              <div class="flex items-center" style="gap: 8px;">
+                <span class="color-theme-contrast-30" style="flex-shrink: 0;">
+                <div>
+                  <span class="color-paragraph">{{ .String "title" }}</span>
+                  <span class="size-sm color-theme-contrast-50">{{ .String "details" }}</span>
+                </div>
               </div>
             </div>
-          </div>
+          {{ end }}
         {{ end }}
-      {{ end }}
-      </div>
+        </div>
 ```
 
 ---
@@ -151,3 +151,8 @@ docker compose pull
 # Restart the container with the new image
 docker compose up -d
 ```
+
+## Contributors
+<a href="https://github.com/danzkigg/glance-agenda-api/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=danzkigg/glance-agenda-api" />
+</a>
